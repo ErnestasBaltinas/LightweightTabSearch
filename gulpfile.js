@@ -1,7 +1,8 @@
 const { src, dest, parallel, watch } = require('gulp'),
   minify = require('gulp-minify'),
   htmlmin = require('gulp-htmlmin'),
-  cleanCSS = require('gulp-clean-css');
+  cleanCSS = require('gulp-clean-css'),
+  jsonminify = require('gulp-jsonminify');
 
 const minifyJs = cb => {
   src('src/*.js')
@@ -36,6 +37,7 @@ const moveImages = cb => {
 
 const moveManifest = cb => {
 	src('src/manifest.json')
+		.pipe(jsonminify())
 		.pipe(dest('dist'));
 	cb();
 };

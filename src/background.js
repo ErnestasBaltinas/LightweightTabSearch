@@ -9,9 +9,7 @@ function updateTabCounter() {
   chrome.tabs.query({}, function (tabs){
 
     // exclude incognito tabs
-    const tempTabs = tabs.filter(tab => {
-        return tab.incognito == false;
-    });
+    const tempTabs = tabs.filter(tab => !tab.incognito);
 
     chrome.browserAction.setBadgeText({text: tempTabs.length.toString()});
   });

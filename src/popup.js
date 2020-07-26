@@ -25,6 +25,7 @@ function prepareTabs() {
 
         document.getElementById("searchInput").value = searchInputValue;
         document.getElementById("searchInput").focus();
+        document.getElementById("searchInput").select();
         filterTabs(searchInputValue);
     });
 }
@@ -144,7 +145,11 @@ function prevTab() {
  * @param element Selected tab.
  */
 function setTabActive(element) {
-    const tabId = parseInt(element.id), windowId = parseInt(element.getAttribute("data-windowId"));
+
+    if (typeof element == 'undefined') return; // do nothing if passed element is undefined
+
+    const tabId = parseInt(element.id), 
+    windowId = parseInt(element.getAttribute("data-windowId"));
 
     chrome.windows.update(windowId, {"focused":true});
     chrome.tabs.update(tabId, {"active": true});
@@ -159,9 +164,7 @@ function setTabActive(element) {
 function closeSelectedTab(element) {
     const tabId = parseInt(element.id);
 
-    tabs = tabs.filter(tab => {
-        return tab.id != tabId;
-    });
+    tabs = tabs.filter(tab => tab.id != tabId);
 
     chrome.tabs.remove(tabId);
 }
@@ -204,6 +207,19 @@ document.getElementById("body").onkeyup = function (e) {
 };
 
 /**
+ * Event is fired on key enter and 'X' button at the end of the field
+ */
+document.getElementById("searchInput").onsearch = event => {
+    const searchValue = event.srcElement.value;
+
+    // when search field is cleared 'X'
+    if (searchValue.length === 0 && searchInputValue !== searchValue) {
+        saveLastSearchedQuery(searchValue);
+        filterTabs(searchValue);
+    }
+};
+
+/**
  * Opens selected tab on mouse click.
  */
 function handleMouseClick() {
@@ -234,7 +250,7 @@ function formatSearchedString(value) {
             searchedPart = value.substr(value.toLowerCase().indexOf(searchInput), searchInput.length),
             end = value.substr(value.toLowerCase().indexOf(searchInput) + searchInput.length);
 
-        return element.innerHTML = start + "<b>" + searchedPart + "</b>" + end;
+        return element.innerHTML = `${start}<b>${searchedPart}</b>${end}`;
     } else {
         return value;
     }
