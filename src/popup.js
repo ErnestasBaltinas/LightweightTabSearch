@@ -74,7 +74,7 @@ function updateTabs(tabs) {
             
             tab.addEventListener("click", handleMouseClick, false);
 
-            tabTitleText.innerHTML = formatSearchedString(tabs[i].title);
+            tabTitleText.innerHTML = formatSearchedString(tabs[i].title.replace(/(<([^>]+)>)/gi, ""));
             tabTitle.appendChild(tabTitleText);
             tabTitle.classList.add("tabTitle");
 
