@@ -1,7 +1,7 @@
 // updates open tab counter
 updateTabCounter();
 
-chrome.browserAction.setBadgeBackgroundColor({"color": "#3fa5ff"});
+chrome.action.setBadgeBackgroundColor({"color": "#3fa5ff"});
 chrome.tabs.onCreated.addListener(updateTabCounter);
 chrome.tabs.onRemoved.addListener(updateTabCounter);
 
@@ -11,6 +11,6 @@ function updateTabCounter() {
     // exclude incognito tabs
     const tempTabs = tabs.filter(tab => !tab.incognito);
 
-    chrome.browserAction.setBadgeText({text: tempTabs.length.toString()});
+    chrome.action.setBadgeText({text: tempTabs.length.toString()});
   });
 }
